@@ -41,3 +41,6 @@ def search_form():
         return run_search(query)
     else:
         return show_search_form()
+
+if __name__ == "__main__":
+    app.run(debug=True)

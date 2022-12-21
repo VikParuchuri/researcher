@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <title>Snip Search</title>
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+    <style>
+        h5 {
+            margin-bottom: 0px;
+        }
+        p.result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<main class="container">
+    <form action="/" method="post">
+      <input type="text" name="query" placeholder="{{ placeholder }}" value="{{ query }}">
+      <input type="submit" value="Search" onClick="this.form.submit(); this.disabled=true; this.value='Searching…';">
+    </form>
+    {%  if summary %}
+        <h3>Summary</h3>
+        <p>{{ summary|safe }}</p>
+    {% endif %}
+    {% if results %}
+        <h3>Sources</h3>
+        {% for result in results %}
+            <h5 id="result-{{ result.rank }}">[{{ result.rank }}] <a href="{{result.link}}">{{ result.title }}</a></h5>
+            <small>{{ result.hostname }}</small>
+            <p class="result"><small>{{ result.text }}</small></p>
+        {% endfor %}
+    {% endif %}
+</main>
+</body>
+</html>

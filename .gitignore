@@ -2,8 +2,7 @@
 links.db
 exploration/
 private.py
-temp*
-blacklist.txt
+temp.html
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

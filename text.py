@@ -4,12 +4,14 @@ from newspaper.extractors import ContentExtractor
 from newspaper.cleaners import DocumentCleaner
 import settings
 from typing import NamedTuple
+import nltk
 from nltk.tokenize import sent_tokenize
 from bs4 import BeautifulSoup
 from itertools import repeat, chain
 import math
 from sentence_transformers import SentenceTransformer, util
 
+nltk.download('punkt')
 model = SentenceTransformer('multi-qa-MiniLM-L6-cos-v1')
 
 class Chunk(NamedTuple):

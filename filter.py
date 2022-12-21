@@ -9,7 +9,7 @@ def clean_hostname(hostname):
     return hostname
 
 
-with open("blacklist.txt") as f:
+with open("data/blacklist.txt") as f:
     blacklist_domains = set([clean_hostname(l) for l in f.read().split("\n")])
 
 
