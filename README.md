@@ -18,8 +18,9 @@ A: ```FastAPI and Flask are two popular Python web frameworks used to build APIs
 
 # Installation
 
-* Clone this repository.
-* Make sure you have Python 3.9+ installed.
+* Clone [this repository](https://github.com/VikParuchuri/snip_search) with git.
+* Make sure you have Python 3.8+ installed.
+* Run `cd snip_search` to get into the repository folder.
 * Run `pip install -r requirements.txt` to install the needed packages.
 * Enter your OpenAI API key in `settings.py` in the `OPENAI_KEY` variable.
 * Run `python app.py` to run the application.  By default it will run on port `5000`.

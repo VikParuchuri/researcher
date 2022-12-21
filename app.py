@@ -23,11 +23,19 @@ def run_search(query):
         raise Exception("Query too short")
     start = time.time()
     results = search(query)
+
+    search_time = time.time()
+    print(f"Search runtime: {search_time - start}")
+
     results = filter_links(results)
     chunks = find_likely_chunks(results, query)
-    print(f"Search runtime: {time.time() - start}")
+
+    processing_time = time.time()
+    print(f"Local processing runtime: {processing_time - search_time}")
+
     summary_text = get_summary(query, chunks)
-    print(f"Search + Summary runtime: {time.time() - start}")
+
+    print(f"API runtime: {time.time() - processing_time}")
     template_results = []
     for i, chunk in enumerate(chunks):
         data = {
