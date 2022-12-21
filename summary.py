@@ -12,7 +12,7 @@ prompt = """\
 Answer the question as truthfully as possible (at most 150 words) using the provided Search Results. Use this current date: {date}. Do not repeat text. Cite one relevant search result per sentence using [${index}]. Only cite results that were used to create the answer.
 
 Format:
-Search Result [${index}]: `${search result text}`
+* Search Result [${index}]: `${search result text}`
  
 Search Results:
 """.replace("{date}", time.strftime("%A, %B %d, %Y", time.gmtime()))
@@ -32,7 +32,6 @@ def generate_prompt(query, chunks):
         text = " ".join(chunk.text.split())
         question += prompt_result.format(index=i + 1, result=text)
     user_prompt = question + "\n" + prompt_question.format(query=query)
-    print(user_prompt)
     return user_prompt
 
 
