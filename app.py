@@ -1,64 +1,37 @@
-from flask import Flask, request
+from flask import Flask, request, render_template
+import settings
 from search import search
 from text import find_likely_chunks
 from filter import filter_links
 import time
-from summary import generate_prompt
+from summary import generate_prompt, get_summary
 
 app = Flask(__name__)
 
-styles = """
-<style>
-    .site {
-        font-size: .8rem;
-        color: green;
-    }
-    
-    .snippet {
-        font-size: .9rem;
-        color: gray;
-        margin-bottom: 30px;
-    }
-</style>
-"""
-
-search_template = styles + """
-     <form action="/" method="post">
-      <input type="text" name="query">
-      <input type="submit" value="Search">
-    </form> 
-    """
-
-result_template = """
-<p class="site">{rank}: {link}</p>
-<a href="{link}">{title}</a>
-<p class="snippet">{snippet}</p>
-"""
-
-
 def show_search_form():
-    return search_template
-
+    return render_template("index.html", placeholder="Enter search query")
 
 def run_search(query):
+    if len(query) < settings.QUERY_MIN_LENGTH:
+        raise Exception("Query too short")
     start = time.time()
     results = search(query)
     print(time.time() - start)
     results = filter_links(results)
     print(time.time() - start)
-    rendered = search_template
     chunks = find_likely_chunks(results, query)
-    print(generate_prompt(query, chunks))
+    summary_text = get_summary(query, chunks)
     print(time.time() - start)
+    template_results = []
     for i, chunk in enumerate(chunks):
         data = {
             "title": chunk.title,
-            "snippet": chunk.text,
+            "text": chunk.text[:settings.CHUNK_DISPLAY_CHARS] + "...",
             "rank": i+1,
             "link": chunk.link
         }
-        rendered += result_template.format(**data)
-    return rendered
+        template_results.append(data)
+    return render_template("index.html", results=template_results, placeholder=query, summary=summary_text)
 
 
 @app.route("/", methods=['GET', 'POST'])

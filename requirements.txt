@@ -8,3 +8,4 @@ peewee
 newspaper3k
 spacy
 nltk
+openai

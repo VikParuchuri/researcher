@@ -7,7 +7,6 @@ import spacy
 from typing import NamedTuple
 from nltk.tokenize import sent_tokenize
 from bs4 import BeautifulSoup
-from multiprocessing import Pool
 from itertools import repeat, chain
 
 nlp = spacy.load("en_core_web_md", disable=["ner", "parser", "tagger", "lemmatizer"])
