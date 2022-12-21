@@ -2,7 +2,6 @@ import math
 from itertools import repeat, chain
 from typing import NamedTuple
 
-import nltk
 from bs4 import BeautifulSoup
 from newspaper import fulltext
 from newspaper.cleaners import DocumentCleaner
@@ -13,7 +12,6 @@ from sentence_transformers import SentenceTransformer, util
 
 import settings
 
-nltk.download('punkt')
 model = SentenceTransformer('multi-qa-MiniLM-L6-cos-v1')
 
 

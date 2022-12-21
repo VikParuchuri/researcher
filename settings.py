@@ -13,6 +13,8 @@ RESULT_COUNT = 10
 MIN_RESULTS = 5
 # Maximum processes to use when scraping results
 MAX_PROCESSES = 10
+# Max time to wait when scraping results
+RESULT_TIMEOUT = 5
 
 ## Filtering
 # Maximum number of tracker URLs allowed in a site (rejects sites with more)

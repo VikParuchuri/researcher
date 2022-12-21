@@ -7,3 +7,4 @@ newspaper3k
 sentence-transformers
 nltk
 openai
+stopit

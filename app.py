@@ -1,5 +1,6 @@
 import time
 from urllib.parse import urlparse
+import os
 
 from flask import Flask, request, render_template
 
@@ -8,6 +9,7 @@ from filter import filter_links
 from search import search
 from summary import get_summary
 from text import find_likely_chunks
+import nltk
 
 app = Flask(__name__)
 
@@ -23,8 +25,9 @@ def run_search(query):
     results = search(query)
     results = filter_links(results)
     chunks = find_likely_chunks(results, query)
+    print(f"Local runtime: {time.time() - start}")
     summary_text = get_summary(query, chunks)
-    print(f"Runtime: {time.time() - start}")
+    print(f"Runtime with API: {time.time() - start}")
     template_results = []
     for i, chunk in enumerate(chunks):
         data = {
@@ -48,4 +51,6 @@ def search_form():
 
 
 if __name__ == "__main__":
+    os.environ["TOKENIZERS_PARALLELISM"] = "false"
+    nltk.download('punkt')
     app.run(debug=True)
