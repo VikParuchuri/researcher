@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 import settings
-
+from multiprocessing import Pool
 
 def clean_hostname(hostname):
     hostname = urlparse(hostname).hostname
@@ -15,7 +15,7 @@ with open("blacklist.txt") as f:
 
 
 def tracker_urls(text):
-    soup = BeautifulSoup(text)
+    soup = BeautifulSoup(text, parser="html.parser")
     scripts = soup.find_all("script", {"src": True})
     srcs = [s.get("src") for s in scripts]
 
@@ -27,22 +27,33 @@ def tracker_urls(text):
     return trackers
 
 
+def total_scripts(text):
+    soup = BeautifulSoup(text, parser="html.parser")
+    scripts = soup.find_all("script")
+    return len(scripts)
+
+
 def blacklisted_domain(link):
     domain = urlparse(link).hostname
     return domain in blacklist_domains
 
 
+def filter_link(link):
+    trackers = tracker_urls(link.html)
+    script_count = total_scripts(link.html)
+    if len(trackers) > settings.MAX_TRACKER_URLS:
+        return None
+
+    if blacklisted_domain(link.link):
+        return None
+
+    if script_count > settings.MAX_SCRIPTS:
+        return None
+
+    return link
+
+
 def filter_links(links):
-    filtered_links = []
-    for i, link in enumerate(links):
-        trackers = tracker_urls(link.html)
-        print(link.link)
-        print(len(trackers))
-        if len(trackers) > settings.MAX_TRACKER_URLS:
-            continue
+    links = map(filter_link, links)
 
-        if blacklisted_domain(link.link):
-            continue
-
-        filtered_links.append(link)
-    return filtered_links
+    return [l for l in links if l]

@@ -2,6 +2,8 @@ from flask import Flask, request
 from search import search
 from text import find_likely_chunks
 from filter import filter_links
+import time
+from summary import generate_prompt
 
 app = Flask(__name__)
 
@@ -39,10 +41,15 @@ def show_search_form():
 
 
 def run_search(query):
+    start = time.time()
     results = search(query)
+    print(time.time() - start)
     results = filter_links(results)
+    print(time.time() - start)
     rendered = search_template
     chunks = find_likely_chunks(results, query)
+    print(generate_prompt(query, chunks))
+    print(time.time() - start)
     for i, chunk in enumerate(chunks):
         data = {
             "title": chunk.title,

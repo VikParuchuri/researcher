@@ -7,8 +7,10 @@ import spacy
 from typing import NamedTuple
 from nltk.tokenize import sent_tokenize
 from bs4 import BeautifulSoup
+from multiprocessing import Pool
+from itertools import repeat, chain
 
-nlp = spacy.load("en_core_web_md")
+nlp = spacy.load("en_core_web_md", disable=["ner", "parser", "tagger", "lemmatizer"])
 
 
 class Chunk(NamedTuple):
@@ -81,26 +83,26 @@ def split_chunks(text):
 def similarity_score(doc1, doc2):
     return doc1.similarity(doc2)
 
+def find_likely_chunk(link, query_doc):
+    if not link.html:
+        return None
+    title = get_title(link.html)
+    text = get_text(link.html)
 
-def similar_chunks(text, title, link, query_doc):
+    if not title or not text:
+        return None
+
     chunks = []
     chunked = split_chunks(text)
-    for chunk in chunked:
-        chunk_doc = nlp(chunk)
-        chunks.append(Chunk(chunk, similarity_score(query_doc, chunk_doc), link, title))
+    chunk_docs = nlp.pipe(chunked)
+    for chunk, chunk_doc in zip(chunked, chunk_docs):
+        chunks.append(Chunk(chunk, similarity_score(query_doc, chunk_doc), link.link, title))
     return chunks
 
-
 def find_likely_chunks(links, query):
-    chunks = []
     query_doc = nlp(query)
-    for i, link in enumerate(links):
-        if not link.html:
-            continue
-        title = get_title(link.html)
-        text = get_text(link.html)
-
-        if title and text:
-            chunks += similar_chunks(text, title, link.link, query_doc)
+    chunks = map(find_likely_chunk, links, repeat(query_doc))
+    chunks = list(chain.from_iterable(chunks))
+    chunks = [c for c in chunks if c]
     sorted_chunks = sorted(chunks, key=lambda x: x.similarity, reverse=True)
-    return sorted_chunks[:settings.RESULT_COUNT]
+    return sorted_chunks[:settings.CHUNK_LIMIT]
