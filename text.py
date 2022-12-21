@@ -3,15 +3,14 @@ from newspaper.configuration import Configuration
 from newspaper.extractors import ContentExtractor
 from newspaper.cleaners import DocumentCleaner
 import settings
-import spacy
 from typing import NamedTuple
 from nltk.tokenize import sent_tokenize
 from bs4 import BeautifulSoup
 from itertools import repeat, chain
 import math
+from sentence_transformers import SentenceTransformer, util
 
-nlp = spacy.load("en_core_web_md")
-
+model = SentenceTransformer('multi-qa-MiniLM-L6-cos-v1')
 
 class Chunk(NamedTuple):
     text: str
@@ -74,12 +73,13 @@ def split_chunks(text):
             chunks.append(chunk)
             chunk = sent
             chunk_len = sent_len
-    chunks.append(chunk)
+    if chunk_len > settings.CHUNK_MIN_LENGTH:
+        chunks.append(chunk)
     return chunks
 
 
 def similarity_score(doc1, doc2):
-    return doc1.similarity(doc2)
+    return util.cos_sim(doc1, doc2)
 
 def find_likely_chunk(link, query_doc):
     if not link.html:
@@ -92,9 +92,10 @@ def find_likely_chunk(link, query_doc):
 
     chunks = []
     chunked = split_chunks(text)
-    chunk_docs = nlp.pipe(chunked)
-    for chunk, chunk_doc in zip(chunked, chunk_docs):
-        chunks.append(Chunk(chunk, similarity_score(query_doc, chunk_doc), link.link, title))
+    chunk_docs = model.encode(chunked)
+    similarities = util.cos_sim(query_doc, chunk_docs)[0].tolist()
+    for (chunk, similarity) in zip(chunked, similarities):
+        chunks.append(Chunk(chunk, similarity, link.link, title))
     sorted_chunks = sorted(chunks, key=lambda x: x.similarity, reverse=True)
     return sorted_chunks[:max(1, math.floor(settings.CHUNK_LIMIT / 2))]
 
@@ -109,7 +110,7 @@ def filter_list(links):
 
 def find_likely_chunks(links, query):
     links = filter_list(links)
-    query_doc = nlp(query)
+    query_doc = model.encode(query)
     chunks = map(find_likely_chunk, links, repeat(query_doc))
     chunks = [c for c in chunks if c]
     chunks = list(chain.from_iterable(chunks))

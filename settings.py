@@ -23,6 +23,8 @@ MAX_TRACKER_URLS = 3
 LANGUAGE = "en"
 # Maximum length in words for context chunks to be used in prompt
 CHUNK_MAX_LENGTH = 256
+# Minimum length in words for context chunks to be used in prompt
+CHUNK_MIN_LENGTH = 128
 # Number of chunks to use when generating prompt
 CHUNK_LIMIT = 6
 

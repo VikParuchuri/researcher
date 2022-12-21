@@ -12,7 +12,7 @@ Instructions:
 # Generate a comprehensive and informative answer (but no more than 100 words) for a given question solely based on the provided web Search Results (URL and Summary).
 # You must only use information from the provided search results. Use an unbiased and journalistic tone.
 # Use this current date: {date}
-# Combine relevant search results together into a coherent answer. Do not repeat text.
+# Combine search results together into a coherent answer. Do not repeat text.
 # Cite one search result per sentence using [${index}]. Only cite the most relevant results that answer the question accurately.
 # Format:
 # Question: `${question text}`

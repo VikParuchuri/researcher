@@ -19,9 +19,8 @@ def run_search(query):
     results = search(query)
     results = filter_links(results)
     chunks = find_likely_chunks(results, query)
-    print(time.time() - start)
     summary_text = get_summary(query, chunks)
-    print(time.time() - start)
+    print(f"Runtime: {time.time() - start}")
     template_results = []
     for i, chunk in enumerate(chunks):
         data = {

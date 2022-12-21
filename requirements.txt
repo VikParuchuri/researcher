@@ -6,6 +6,6 @@ googlesearch-python
 jupyterlab
 peewee
 newspaper3k
-spacy
+sentence-transformers
 nltk
 openai
