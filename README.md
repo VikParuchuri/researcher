@@ -45,6 +45,13 @@ A: ```FastAPI and Flask are two popular Python web frameworks used to build APIs
 * The top N text chunks are used to generate a summary using GPT-3
 * The summary is displayed along with the sources used to generate it
 
+# FAQ
+
+* **Does this cost money?** This uses the OpenAI API, which can cost money depending on your credits.  Each query should cost around 1/3 of a cent.  If you use API mode, it can also cost money based on your Google searches.  Google Custom Search offers 100 free searches per day, then it will cost $5 per 1000 queries.
+* **Why does it take so long to get results?**  Snip Search runs a search, then scrapes the sites to get relevant context, then  calls an API to summarize the context.  These operations take a long time.  Adjusting some settings may speed this up.  Particularly chunk length and result count.
+* **Why do I get a 429 error?** By default, Snip Search will scrape Google results.  If you do this too often, you can get a 429 error.  Switch to API mode (explained above) to avoid this.
+* **Why do I get an error that the summary couldn't be generated?** The OpenAI API occassionally will have an issue.  This will result in the summary not being shown.  Just run the search again to fix this.
+
 # Future improvements
 
 * Improve UI to show search progress
