@@ -1,18 +1,21 @@
+import math
+from itertools import repeat, chain
+from typing import NamedTuple
+
+import nltk
+from bs4 import BeautifulSoup
 from newspaper import fulltext
+from newspaper.cleaners import DocumentCleaner
 from newspaper.configuration import Configuration
 from newspaper.extractors import ContentExtractor
-from newspaper.cleaners import DocumentCleaner
-import settings
-from typing import NamedTuple
-import nltk
 from nltk.tokenize import sent_tokenize
-from bs4 import BeautifulSoup
-from itertools import repeat, chain
-import math
 from sentence_transformers import SentenceTransformer, util
+
+import settings
 
 nltk.download('punkt')
 model = SentenceTransformer('multi-qa-MiniLM-L6-cos-v1')
+
 
 class Chunk(NamedTuple):
     text: str
@@ -27,6 +30,7 @@ def strip_html(text):
         if e.name in ['script', 'head', 'style', 'aside', 'footer', 'header', 'nav', 'img', 'svg', 'button', 'form']:
             e.extract()
     return str(soup)
+
 
 def get_text(text):
     text = strip_html(text)
@@ -83,6 +87,7 @@ def split_chunks(text):
 def similarity_score(doc1, doc2):
     return util.cos_sim(doc1, doc2)
 
+
 def find_likely_chunk(link, query_doc):
     if not link.html:
         return None
@@ -101,6 +106,7 @@ def find_likely_chunk(link, query_doc):
     sorted_chunks = sorted(chunks, key=lambda x: x.similarity, reverse=True)
     return sorted_chunks[:max(1, math.floor(settings.CHUNK_LIMIT / 2))]
 
+
 def filter_list(links):
     flat_links = []
     filtered_links = []
@@ -109,6 +115,7 @@ def filter_list(links):
             filtered_links.append(link)
             flat_links.append(link.link)
     return filtered_links
+
 
 def find_likely_chunks(links, query):
     links = filter_list(links)

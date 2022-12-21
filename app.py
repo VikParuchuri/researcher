@@ -1,16 +1,20 @@
-from flask import Flask, request, render_template
-import settings
-from search import search
-from text import find_likely_chunks
-from filter import filter_links
 import time
-from summary import get_summary
 from urllib.parse import urlparse
+
+from flask import Flask, request, render_template
+
+import settings
+from filter import filter_links
+from search import search
+from summary import get_summary
+from text import find_likely_chunks
 
 app = Flask(__name__)
 
+
 def show_search_form():
     return render_template("index.html", placeholder="Enter search query")
+
 
 def run_search(query):
     if len(query) < settings.QUERY_MIN_LENGTH:
@@ -26,7 +30,7 @@ def run_search(query):
         data = {
             "title": chunk.title,
             "text": chunk.text[:settings.CHUNK_DISPLAY_CHARS] + "...",
-            "rank": i+1,
+            "rank": i + 1,
             "link": chunk.link,
             "hostname": urlparse(chunk.link).hostname
         }
@@ -41,6 +45,7 @@ def search_form():
         return run_search(query)
     else:
         return show_search_form()
+
 
 if __name__ == "__main__":
     app.run(debug=True)

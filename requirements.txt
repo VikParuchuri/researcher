@@ -1,9 +1,7 @@
 flask
-pandas
 requests
 beautifulsoup4
 googlesearch-python
-jupyterlab
 peewee
 newspaper3k
 sentence-transformers

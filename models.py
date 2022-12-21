@@ -1,7 +1,9 @@
-from peewee import Model, SqliteDatabase, TextField, IntegerField, ForeignKeyField, DateTimeField
 from datetime import datetime
 
+from peewee import Model, SqliteDatabase, TextField, IntegerField, ForeignKeyField, DateTimeField
+
 db = SqliteDatabase('links.db')
+
 
 class Query(Model):
     query = TextField()
@@ -9,6 +11,7 @@ class Query(Model):
 
     class Meta:
         database = db
+
 
 class Link(Model):
     link = TextField()
@@ -19,5 +22,6 @@ class Link(Model):
 
     class Meta:
         database = db
+
 
 db.create_tables([Query, Link])

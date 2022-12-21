@@ -33,5 +33,6 @@ CHUNK_LIMIT = 6
 CHUNK_DISPLAY_CHARS = 500
 
 import os
+
 if os.path.exists("private.py"):
-    from private import *
+    pass

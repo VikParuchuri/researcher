@@ -1,9 +1,12 @@
-import requests
-from requests.exceptions import RequestException
-from models import Query, Link
-import settings
-from googlesearch import search as gsearch
 from multiprocessing import Pool
+
+import requests
+from googlesearch import search as gsearch
+from requests.exceptions import RequestException
+
+import settings
+from models import Query, Link
+
 
 def scrape_page(link):
     html = None
@@ -38,7 +41,7 @@ def search(query, num_results=settings.RESULT_COUNT):
             link_obj = Link(
                 query=query_obj,
                 html=html,
-                rank=i+1,
+                rank=i + 1,
                 link=link
             )
             link_obj.save()
