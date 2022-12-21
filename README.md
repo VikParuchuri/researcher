@@ -22,11 +22,11 @@ A: ```FastAPI and Flask are two popular Python web frameworks used to build APIs
 * Make sure you have Python 3.9+ installed.
 * Run `pip install -r requirements.txt` to install the needed packages.
 * Enter your OpenAI API key in `settings.py` in the `OPENAI_KEY` variable.
+* Run `python app.py` to run the application.  By default it will run on port `5000`.
 * [Optional] By default, snip search will scrape Google search results.  This is not always reliable.  If you want more reliability, register a [custom search engine](https://developers.google.com/custom-search/) with Google, then:
   * Enter the API key in `settings.py` in the `SEARCH_KEY` variable.  
   * Enter the custom search engine ID in `SEARCH_ID`.
   * Change the `SEARCH_METHOD` to `api`.
-* Run `python app.py` to run the application.  By default it will run on port `5000`.
 
 # Usage
 
@@ -43,3 +43,10 @@ A: ```FastAPI and Flask are two popular Python web frameworks used to build APIs
 * Chunks of text are pulled from each site, and ranked against the search query
 * The top N text chunks are used to generate a summary using GPT-3
 * The summary is displayed along with the sources used to generate it
+
+# Future improvements
+
+* Improve UI to show search progress
+* Speed up the search process
+* Improve algorithm to find optimal text chunks
+* Try a self-hosted model instead of GPT-3

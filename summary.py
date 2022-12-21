@@ -9,32 +9,30 @@ import settings
 openai.api_key = settings.OPENAI_KEY
 
 prompt = """\
-Instructions: 
-# Generate a comprehensive and informative answer (but no more than 100 words) for a given question solely based on the provided web Search Results (URL and Summary).
-# You must only use information from the provided search results. Use an unbiased and journalistic tone.
-# Use this current date: {date}
-# Combine search results together into a coherent answer. Do not repeat text.
-# Cite one search result per sentence using [${index}]. Only cite the most relevant results that answer the question accurately.
-# Format:
-# Question: `${question text}`
-# Search result [${index}]: `${search result text}`
-Answer:""".replace("{date}", time.strftime("%A, %B %d, %Y", time.gmtime()))
+Answer the question as truthfully as possible (at most 150 words) using the provided Search Results. Use this current date: {date}. Do not repeat text. Cite one relevant search result per sentence using [${index}]. Only cite results that were used to create the answer.
+
+Format:
+Search Result [${index}]: `${search result text}`
+ 
+Search Results:
+""".replace("{date}", time.strftime("%A, %B %d, %Y", time.gmtime()))
 
 prompt_question = """\
-Question: `{query}`
-"""
+Q: `{query}`
+A:"""
 
 prompt_result = """\
-Search result [{index}]: `{result}`
+* Search Result [{index}]: `{result}`
 """
 
 
 def generate_prompt(query, chunks):
-    question = prompt_question.format(query=query)
+    question = prompt
     for i, chunk in enumerate(chunks):
         text = " ".join(chunk.text.split())
-        question += "\n" + prompt_result.format(index=i + 1, result=text)
-    user_prompt = question + "\n" + prompt
+        question += prompt_result.format(index=i + 1, result=text)
+    user_prompt = question + "\n" + prompt_question.format(query=query)
+    print(user_prompt)
     return user_prompt
 
 
