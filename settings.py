@@ -15,6 +15,19 @@ MIN_RESULTS = 5
 MAX_PROCESSES = 10
 # Max time to wait when scraping results
 RESULT_TIMEOUT = 5
+# Search method
+SEARCH_METHOD = "scrape" # "scrape" or "api"
+
+## Google Custom Search
+# Only used when SEARCH_METHOD is "api"
+# Google custom search api key
+SEARCH_KEY = ""
+# Google custom search engine id
+SEARCH_ID = ""
+# Country to search from
+COUNTRY = "us"
+# Google custom search url
+SEARCH_URL = "https://www.googleapis.com/customsearch/v1?key={key}&cx={cx}&q={query}&start={start}&num=10&gl=" + COUNTRY
 
 ## Filtering
 # Maximum number of tracker URLs allowed in a site (rejects sites with more)
@@ -28,7 +41,7 @@ CHUNK_MAX_LENGTH = 256
 # Minimum length in words for context chunks to be used in prompt
 CHUNK_MIN_LENGTH = 128
 # Number of chunks to use when generating prompt
-CHUNK_LIMIT = 6
+CHUNK_LIMIT = 5
 
 ## Display
 # Maximum number of characters in a chunk to display

@@ -1,18 +1,20 @@
 # Snip Search
 
-Snip Search uses Google and GPT-3 to provide concise answers to search queries with citations.
+Snip Search uses Google and GPT-3 to provide concise answers to search queries, and includes citations.
+
+It's useful for getting an overview of a topic without having to read lots of SEO-spam pages.
 
 ## Screenshots
 
-| Technical Q&A                   | Recommendation |
-|---------------------------------|----------------|
-| ![Search 1](images/screen1.png) | ![Search 2](images/screen2.png)   |
+| Technical Q&A                   | Recommendation                  |
+|---------------------------------|---------------------------------|
+| ![Search 1](images/screen1.png) | ![Search 2](images/screen2.png) |
 
 ## Example
 
-`What are alternatives to FastAPI?`
+Q: `What are alternatives to FastAPI?`
 
-```FastAPI and Flask are two popular Python web frameworks used to build APIs and web applications. FastAPI is a full-stack framework that offers everything you need to build an API, while Flask is a micro framework that doesn't provide all the features that FastAPI does. FastAPI focuses on reliability, security, and simplicity, and is designed to build APIs easily and quickly. Flask is less well-documented and is slower than FastAPI, but is useful when you want to prototype an idea quickly or build a simple web application. [1]...```
+A: ```FastAPI and Flask are two popular Python web frameworks used to build APIs and web applications. FastAPI is a full-stack framework that offers everything you need to build an API, while Flask is a micro framework that doesn't provide all the features that FastAPI does. FastAPI focuses on reliability, security, and simplicity, and is designed to build APIs easily and quickly. Flask is less well-documented and is slower than FastAPI, but is useful when you want to prototype an idea quickly or build a simple web application. [1]...```
 
 # Installation
 
@@ -20,6 +22,10 @@ Snip Search uses Google and GPT-3 to provide concise answers to search queries w
 * Make sure you have Python 3.9+ installed.
 * Run `pip install -r requirements.txt` to install the needed packages.
 * Enter your OpenAI API key in `settings.py` in the `OPENAI_KEY` variable.
+* [Optional] By default, snip search will scrape Google search results.  This is not always reliable.  If you want more reliability, register a [custom search engine](https://developers.google.com/custom-search/) with Google, then:
+  * Enter the API key in `settings.py` in the `SEARCH_KEY` variable.  
+  * Enter the custom search engine ID in `SEARCH_ID`.
+  * Change the `SEARCH_METHOD` to `api`.
 * Run `python app.py` to run the application.  By default it will run on port `5000`.
 
 # Usage

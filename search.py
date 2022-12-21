@@ -1,4 +1,6 @@
 from multiprocessing import Pool
+import math
+from urllib.parse import quote_plus
 
 import requests
 from googlesearch import search as gsearch
@@ -24,6 +26,23 @@ def scrape_page(link):
     return html
 
 
+def search_api(query, pages):
+    results = []
+    for i in range(0, pages):
+        start = i*10+1
+        url = settings.SEARCH_URL.format(
+            key=settings.SEARCH_KEY,
+            cx=settings.SEARCH_ID,
+            query=quote_plus(query),
+            start=start
+        )
+        response = requests.get(url)
+        data = response.json()
+        results += data["items"]
+    links = [r["link"] for r in results]
+    return links
+
+
 def search(query, num_results=settings.RESULT_COUNT):
     query_obj = Query.get_or_none(query=query)
     if query_obj:
@@ -32,7 +51,10 @@ def search(query, num_results=settings.RESULT_COUNT):
     else:
         query_obj = Query(query=query)
         query_obj.save()
-    links = gsearch_wrapper(query, num_results, timeout=settings.RESULT_TIMEOUT)
+    if settings.SEARCH_METHOD == "scrape":
+        links = gsearch_wrapper(query, num_results, timeout=settings.RESULT_TIMEOUT)
+    else:
+        links = search_api(query, pages=math.ceil(num_results/10))
     if links == 'not finished':
         raise Exception("Problem getting results from search.")
     with Pool(settings.MAX_PROCESSES) as p:
