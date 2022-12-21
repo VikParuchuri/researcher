@@ -4,7 +4,8 @@ from search import search
 from text import find_likely_chunks
 from filter import filter_links
 import time
-from summary import generate_prompt, get_summary
+from summary import get_summary
+from urllib.parse import urlparse
 
 app = Flask(__name__)
 
@@ -16,10 +17,9 @@ def run_search(query):
         raise Exception("Query too short")
     start = time.time()
     results = search(query)
-    print(time.time() - start)
     results = filter_links(results)
-    print(time.time() - start)
     chunks = find_likely_chunks(results, query)
+    print(time.time() - start)
     summary_text = get_summary(query, chunks)
     print(time.time() - start)
     template_results = []
@@ -28,10 +28,11 @@ def run_search(query):
             "title": chunk.title,
             "text": chunk.text[:settings.CHUNK_DISPLAY_CHARS] + "...",
             "rank": i+1,
-            "link": chunk.link
+            "link": chunk.link,
+            "hostname": urlparse(chunk.link).hostname
         }
         template_results.append(data)
-    return render_template("index.html", results=template_results, placeholder=query, summary=summary_text)
+    return render_template("index.html", results=template_results, placeholder="", summary=summary_text, query=query)
 
 
 @app.route("/", methods=['GET', 'POST'])

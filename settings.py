@@ -1,6 +1,8 @@
 ## API
 # Key to access the OpenAI API
 OPENAI_KEY = ""
+# Maximum number of tokens
+OPENAI_TOKEN_MAX = 256
 
 ## Search
 # Minimum length for valid search query
@@ -10,21 +12,19 @@ RESULT_COUNT = 15
 # Minimum number of valid search results
 MIN_RESULTS = 5
 # Maximum processes to use when scraping results
-MAX_PROCESSES = 10
+MAX_PROCESSES = 15
 
 ## Filtering
 # Maximum number of tracker URLs allowed in a site (rejects sites with more)
 MAX_TRACKER_URLS = 3
-# Maximum script tags to allow on a site (rejects sites with more)
-MAX_SCRIPTS = 15
 
 ## Parsing
 # Language to use to parse results
 LANGUAGE = "en"
 # Maximum length in words for context chunks to be used in prompt
-CHUNK_MAX_LENGTH = 512
+CHUNK_MAX_LENGTH = 256
 # Number of chunks to use when generating prompt
-CHUNK_LIMIT = 5
+CHUNK_LIMIT = 9
 
 ## Display
 # Maximum number of characters in a chunk to display

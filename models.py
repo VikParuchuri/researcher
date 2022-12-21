@@ -1,4 +1,4 @@
-from peewee import Model, SqliteDatabase, CharField, TextField, IntegerField, ForeignKeyField, DateTimeField
+from peewee import Model, SqliteDatabase, TextField, IntegerField, ForeignKeyField, DateTimeField
 from datetime import datetime
 
 db = SqliteDatabase('links.db')

@@ -8,8 +8,9 @@ from typing import NamedTuple
 from nltk.tokenize import sent_tokenize
 from bs4 import BeautifulSoup
 from itertools import repeat, chain
+import math
 
-nlp = spacy.load("en_core_web_md", disable=["ner", "parser", "tagger", "lemmatizer"])
+nlp = spacy.load("en_core_web_md", disable=["ner"])
 
 
 class Chunk(NamedTuple):
@@ -22,17 +23,15 @@ class Chunk(NamedTuple):
 def strip_html(text):
     soup = BeautifulSoup(text, 'html.parser')
     for e in soup.find_all():
-        if e.name in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']:
+        if e.name in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'script', 'head', 'style', 'aside', 'footer', 'header', 'nav', 'img', 'svg']:
             e.extract()
-        elif e.name not in ['ol', 'ul', 'li', 'pre', 'code', 'p']:
-            e.unwrap()
     return str(soup)
 
 def get_text(text):
     text = strip_html(text)
     try:
         text = fulltext(text, language=settings.LANGUAGE)
-    except (AttributeError, TypeError):
+    except (AttributeError, TypeError, UnicodeDecodeError):
         text = None
     return text
 
@@ -101,6 +100,7 @@ def find_likely_chunk(link, query_doc):
 def find_likely_chunks(links, query):
     query_doc = nlp(query)
     chunks = map(find_likely_chunk, links, repeat(query_doc))
+    chunks = [c for c in chunks if c]
     chunks = list(chain.from_iterable(chunks))
     chunks = [c for c in chunks if c]
     sorted_chunks = sorted(chunks, key=lambda x: x.similarity, reverse=True)
