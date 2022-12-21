@@ -35,4 +35,4 @@ CHUNK_DISPLAY_CHARS = 500
 import os
 
 if os.path.exists("private.py"):
-    pass
+    from private import *

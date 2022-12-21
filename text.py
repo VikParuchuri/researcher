@@ -84,10 +84,6 @@ def split_chunks(text):
     return chunks
 
 
-def similarity_score(doc1, doc2):
-    return util.cos_sim(doc1, doc2)
-
-
 def find_likely_chunk(link, query_doc):
     if not link.html:
         return None
@@ -99,6 +95,10 @@ def find_likely_chunk(link, query_doc):
 
     chunks = []
     chunked = split_chunks(text)
+
+    if len(chunked) == 0:
+        return None
+
     chunk_docs = model.encode(chunked)
     similarities = util.cos_sim(query_doc, chunk_docs)[0].tolist()
     for (chunk, similarity) in zip(chunked, similarities):
