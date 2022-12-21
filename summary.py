@@ -1,3 +1,5 @@
+import html
+
 import openai
 from openai.error import ServiceUnavailableError, APIError, Timeout
 import settings
@@ -10,7 +12,7 @@ Instructions:
 # Generate a comprehensive and informative answer (but no more than 100 words) for a given question solely based on the provided web Search Results (URL and Summary).
 # You must only use information from the provided search results. Use an unbiased and journalistic tone.
 # Use this current date: {date}
-# Combine search results together into a coherent answer. Do not repeat text.
+# Combine relevant search results together into a coherent answer. Do not repeat text.
 # Cite one search result per sentence using [${index}]. Only cite the most relevant results that answer the question accurately.
 # Format:
 # Question: `${question text}`
@@ -46,5 +48,6 @@ def get_summary(query, chunks):
         response = response.choices[0].text
     except (ServiceUnavailableError, APIError, Timeout):
         response = "Error generating summary"
+    response = html.escape(response)
     response = replace_links(response, chunks)
     return response

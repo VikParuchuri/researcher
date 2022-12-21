@@ -8,7 +8,9 @@ from multiprocessing import Pool
 def scrape_page(link):
     html = None
     try:
-        html = requests.get(link, timeout=5).text
+        response = requests.get(link, timeout=5)
+        if response.status_code == 200:
+            html = response.text
     except RequestException:
         pass
     return html

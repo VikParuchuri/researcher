@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 from itertools import repeat, chain
 import math
 
-nlp = spacy.load("en_core_web_md", disable=["ner"])
+nlp = spacy.load("en_core_web_md")
 
 
 class Chunk(NamedTuple):
@@ -23,7 +23,7 @@ class Chunk(NamedTuple):
 def strip_html(text):
     soup = BeautifulSoup(text, 'html.parser')
     for e in soup.find_all():
-        if e.name in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'script', 'head', 'style', 'aside', 'footer', 'header', 'nav', 'img', 'svg']:
+        if e.name in ['script', 'head', 'style', 'aside', 'footer', 'header', 'nav', 'img', 'svg', 'button', 'form']:
             e.extract()
     return str(soup)
 
@@ -95,9 +95,20 @@ def find_likely_chunk(link, query_doc):
     chunk_docs = nlp.pipe(chunked)
     for chunk, chunk_doc in zip(chunked, chunk_docs):
         chunks.append(Chunk(chunk, similarity_score(query_doc, chunk_doc), link.link, title))
-    return chunks
+    sorted_chunks = sorted(chunks, key=lambda x: x.similarity, reverse=True)
+    return sorted_chunks[:max(1, math.floor(settings.CHUNK_LIMIT / 2))]
+
+def filter_list(links):
+    flat_links = []
+    filtered_links = []
+    for link in links:
+        if link.link not in flat_links:
+            filtered_links.append(link)
+            flat_links.append(link.link)
+    return filtered_links
 
 def find_likely_chunks(links, query):
+    links = filter_list(links)
     query_doc = nlp(query)
     chunks = map(find_likely_chunk, links, repeat(query_doc))
     chunks = [c for c in chunks if c]

@@ -24,7 +24,7 @@ LANGUAGE = "en"
 # Maximum length in words for context chunks to be used in prompt
 CHUNK_MAX_LENGTH = 256
 # Number of chunks to use when generating prompt
-CHUNK_LIMIT = 7
+CHUNK_LIMIT = 6
 
 ## Display
 # Maximum number of characters in a chunk to display
