@@ -21,7 +21,7 @@ A: ```FastAPI and Flask are two popular Python web frameworks used to build APIs
 # Installation
 
 * Clone [this repository](https://github.com/VikParuchuri/snip_search) with git.
-* Make sure you have Python 3.8+ installed.
+* Make sure you have Python 3.8+ installed.  As of 12/22, Pytorch doesn't support Python 3.11 on all platforms, so Python 3.10 is recommended.
 * Run `cd snip_search` to get into the repository folder.
 * Run `pip install -r requirements.txt` to install the needed packages.
 * Enter your OpenAI API key in `settings.py` in the `OPENAI_KEY` variable.
