@@ -10,7 +10,7 @@ QUERY_MIN_LENGTH = 10
 # Number of results to search for
 RESULT_COUNT = 10
 # Minimum number of valid search results
-MIN_RESULTS = 5
+MIN_RESULTS = 3
 # Maximum processes to use when scraping results
 MAX_PROCESSES = 10
 # Max time to wait when scraping results

@@ -25,6 +25,9 @@ def scrape_page(link):
         pass
     return html
 
+def scrape_playwright(link, browser):
+    pass
+
 
 def search_api(query, pages):
     results = []

@@ -9,7 +9,7 @@ import settings
 openai.api_key = settings.OPENAI_KEY
 
 prompt = """\
-Answer the question as truthfully as possible (at most 150 words) using the provided Search Results. Use this current date: {date}. Do not repeat text. Cite one relevant search result per sentence using [${index}]. Only cite results that were used to create the answer.
+Answer the question as truthfully as possible using the provided Search Results. Use this current date: {date}. Do not repeat text. Cite one relevant search result per sentence using [${index}]. Only cite results that were used to create the answer.  Use at most 150 words.
 
 Format:
 * Search Result [${index}]: `${search result text}`
