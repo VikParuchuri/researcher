@@ -1,0 +1,8 @@
+{% if links %}
+    <h3 id="links">Links</h3>
+    <ul>
+    {%  for link in links %}
+        <li><a href="{{ link.link | safe }}">{{ link.link }}</a></li>
+    {%  endfor %}
+    </ul>
+{%  endif %}

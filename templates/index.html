@@ -7,29 +7,79 @@
         h5 {
             margin-bottom: 0px;
         }
+
         p.result {
             margin-top: 20px;
         }
+
+        .invisible {
+            display: none;
+        }
     </style>
+    <script type="text/javascript">
+        let update_progress = function(step) {
+            let progress = document.getElementById("progress");
+            let text = "Searching..." + ((step >= 1) ? 'Done' : '') + "\n";
+            text += "Processing..." + ((step >= 2) ? 'Done' : '') + "\n";
+            text += "Summarizing..." + ((step >= 3) ? 'Done' : '') + "\n";
+            progress.innerText = text;
+        }
+        let post_data = function () {
+            let form = document.getElementById("search_form");
+            let button = document.getElementById("search_button");
+            let results = document.getElementById("results");
+            let progress = document.getElementById("progress");
+
+            button.disabled = true;
+            progress.innerText = "";
+            progress.classList.toggle("invisible");
+
+            button.value = "Searching...";
+            const decoder = new TextDecoder('utf-8');
+            results.innerHTML = "";
+
+            let step = 0;
+            update_progress(step);
+            fetch('/', {
+                method: 'POST',
+                body: new URLSearchParams(new FormData(form))
+            })
+                .then(response => {
+                    const reader = response.body.getReader();
+
+                    function read() {
+                        reader.read().then(({done, value}) => {
+                            if (done) {
+                                button.disabled = false;
+                                button.value = "Search";
+                                progress.classList.toggle("invisible");
+                                return;
+                            }
+                            const html = decoder.decode(value);
+                            results.innerHTML = html + results.innerHTML;
+                            step += 1;
+                            update_progress(step);
+                            console.log(html.length);
+                            read();
+                        });
+                    }
+
+                    read();
+                });
+
+        }
+    </script>
 </head>
 <body>
 <main class="container">
-    <form action="/" method="post">
-      <input type="text" name="query" placeholder="{{ placeholder }}" value="{{ query }}">
-      <input type="submit" value="Search" onClick="this.form.submit(); this.disabled=true; this.value='Searching…';">
+    <form action="/" method="post" id="search_form">
+        <input type="text" name="query" placeholder="{{ placeholder }}" value="{{ query }}">
+        <input type="submit" value="Search" onClick="event.preventDefault(); post_data();" id="search_button">
     </form>
-    {%  if summary %}
-        <h3>Summary</h3>
-        <p>{{ summary|safe }}</p>
-    {% endif %}
-    {% if results %}
-        <h3>Sources</h3>
-        {% for result in results %}
-            <h5 id="result-{{ result.rank }}">[{{ result.rank }}] <a href="{{result.link}}">{{ result.title }}</a></h5>
-            <small>{{ result.hostname }}</small>
-            <p class="result"><small>{{ result.text }}</small></p>
-        {% endfor %}
-    {% endif %}
+    <pre id="progress" class="invisible">
+    </pre>
+    <div id="results">
+    </div>
 </main>
 </body>
 </html>

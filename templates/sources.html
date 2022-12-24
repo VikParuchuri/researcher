@@ -1,0 +1,8 @@
+{% if results %}
+    <h3 id="sources">Sources</h3>
+    {% for result in results %}
+        <h5 id="result-{{ result.rank }}">[{{ result.rank }}] <a href="{{result.link}}">{{ result.title }}</a></h5>
+        <small>{{ result.hostname }}</small>
+        <p class="result"><small>{{ result.text }}</small></p>
+    {% endfor %}
+{% endif %}
