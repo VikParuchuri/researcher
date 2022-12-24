@@ -12,11 +12,13 @@ Researcher solves these problems by feeding relevant sections from Google search
 |---------------------------------|---------------------------------|
 | ![Search 1](images/screen1.png) | ![Search 2](images/screen2.png) |
 
-## Example
+## Comparison
 
-Q: `What are alternatives to FastAPI?`
+By feeding web context into a large language model, you can improve accuracy and verify the information.  In this example, you have no way to verify the information from ChatGPT.  It also isn't very specific.  Researcher gives you cited sources and more specific information by relying on context from Google.
 
-A: ```FastAPI and Flask are two popular Python web frameworks used to build APIs and web applications. FastAPI is a full-stack framework that offers everything you need to build an API, while Flask is a micro framework that doesn't provide all the features that FastAPI does. FastAPI focuses on reliability, security, and simplicity, and is designed to build APIs easily and quickly. Flask is less well-documented and is slower than FastAPI, but is useful when you want to prototype an idea quickly or build a simple web application. [1]...```
+| ChatGPT                         | Researcher                      |
+|---------------------------------|---------------------------------|
+| ![Search 3](images/chatgpt.png) | ![Search 3](images/screen3.png) |
 
 # Installation
 
