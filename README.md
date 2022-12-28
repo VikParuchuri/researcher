@@ -1,16 +1,10 @@
 # Researcher
 
-Researcher saves you time by using AI to answer questions.  It uses Google and GPT-3 to create concise and accurate answers.  It includes citations so you can look up sources.
+Researcher saves you time by using Google and GPT-3 to answer questions concisely and accurately.  It includes citations so you can look up sources.
 
-It's a different search paradigm from using Google or GPT-3 alone.  With Google, you have to scan through several pieces of SEO-spam content to find what you want.  With GPT-3, you can't be sure if the answer you got is correct, or where it came from.
+It's a different search paradigm from using Google or GPT alone.  With Google, you have to scan through several pieces of SEO-spam content to find the answer.  With GPT, you can't be sure if the answer you got is correct, or where it came from.
 
-Researcher solves these problems by feeding relevant sections from Google search results into GPT-3.  You don't have to read through all of the results yourself, but you can see where the answer came from.
-
-## Screenshots
-
-| Technical Q&A                   | Recommendation                  |
-|---------------------------------|---------------------------------|
-| ![Search 1](images/screen1.png) | ![Search 2](images/screen2.png) |
+Researcher solves these problems by feeding relevant sections from Google search results into GPT-3 to generate an overview.
 
 ## Comparison
 
@@ -20,11 +14,17 @@ By feeding web context into a large language model, you can improve accuracy and
 |---------------------------------|---------------------------------|
 | ![Search 3](images/chatgpt.png) | ![Search 3](images/screen3.png) |
 
+## Screenshots
+
+| Technical Q&A                   | Recommendation                  |
+|---------------------------------|---------------------------------|
+| ![Search 1](images/screen1.png) | ![Search 2](images/screen2.png) |
+
 # Installation
 
 * Clone [this repository](https://github.com/VikParuchuri/snip_search) with git.
 * Make sure you have Python 3.8+ installed.  As of 12/22, Pytorch doesn't support Python 3.11 on all platforms, so Python 3.10 is recommended.
-* Run `cd snip_search` to get into the repository folder.
+* Run `cd researcher` to get into the repository folder.
 * Run `pip install -r requirements.txt` to install the needed packages.
 * Enter your OpenAI API key in `settings.py` in the `OPENAI_KEY` variable.
 * Run `python app.py` to run the application.  By default it will run on port `5000`.
@@ -58,7 +58,7 @@ By feeding web context into a large language model, you can improve accuracy and
 
 # Future improvements
 
-* Improve UI to show search progress
 * Speed up the search process
 * Improve algorithm to find optimal text chunks
-* Try a self-hosted model instead of GPT-3
+* Try a self-hosted model instead of GPT-3 (perhaps PEGASUS for summarization, or a fine-tuned BLOOM or T5 variant)
+* Summarize text chunks before passing to GPT-3

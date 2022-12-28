@@ -15,14 +15,59 @@
         .invisible {
             display: none;
         }
+
+        .one {
+            opacity: 0;
+            animation: dot 1.3s infinite;
+            animation-delay: 0.0s;
+        }
+
+        .two {
+            opacity: 0;
+            animation: dot 1.3s infinite;
+            animation-delay: 0.2s;
+        }
+
+        .three {
+            opacity: 0;
+            animation: dot 1.3s infinite;
+            animation-delay: 0.3s;
+        }
+
+        @-webkit-keyframes dot {
+            0% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes dot {
+            0% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
     </style>
     <script type="text/javascript">
-        let update_progress = function(step) {
+        let indicator = '<span class="one">.</span><span class="two">.</span><span class="three">.</span>';
+        let update_progress = function (step) {
             let progress = document.getElementById("progress");
-            let text = "Searching..." + ((step >= 1) ? 'Done' : '') + "\n";
-            text += "Processing..." + ((step >= 2) ? 'Done' : '') + "\n";
-            text += "Summarizing..." + ((step >= 3) ? 'Done' : '') + "\n";
-            progress.innerText = text;
+            let text = "<h6>Progress</h6><ol>"
+            text += "<li>Searching" + ((step === 0) ? indicator : '') + ((step >= 1) ? '...Done' : '') + "</li>";
+            text += "<li>Processing" + ((step === 1) ? indicator : '') + ((step >= 2) ? '...Done' : '') + "</li>";
+            text += "<li>Summarizing" + ((step === 2) ? indicator : '') + ((step >= 3) ? '...Done' : '') + "</li>";
+            text += "</ol>"
+            progress.innerHTML = text;
         }
         let post_data = function () {
             let form = document.getElementById("search_form");
@@ -76,8 +121,8 @@
         <input type="text" name="query" placeholder="{{ placeholder }}" value="{{ query }}">
         <input type="submit" value="Search" onClick="event.preventDefault(); post_data();" id="search_button">
     </form>
-    <pre id="progress" class="invisible">
-    </pre>
+    <div id="progress" class="invisible">
+    </div>
     <div id="results">
     </div>
 </main>
